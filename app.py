@@ -37,7 +37,7 @@ st.sidebar.caption(
 tab1, tab2, tab3, tab4 = st.tabs([
     "Dokumentleser",
     "Ordfrekvenser per parti",
-    "Særpregede ord (Overrepresentasjon)",
+    "Særpregede ord",
     "Kollokasjoner",
 ])
 
