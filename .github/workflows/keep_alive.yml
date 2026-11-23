@@ -1,0 +1,15 @@
+name: Hold Streamlit-appen våken
+
+on:
+  schedule:
+    # Kjører hver 6. time hele døgnet
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Besøk Streamlit-appen
+        run: |
+          curl -s -L "https://stortinget-korpus-hark2020.streamlit.app/" > /dev/null
