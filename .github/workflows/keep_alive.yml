@@ -10,6 +10,28 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Besøk Streamlit-appen
+      - name: Sett opp Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer Playwright
         run: |
-          curl -s -L "https://stortinget-korpus-hark2020.streamlit.app/" > /dev/null
+          pip install playwright
+          playwright install chromium
+
+      - name: Besøk og vekk Streamlit-appen
+        run: |
+          python -c "
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as p:
+              browser = p.chromium.launch()
+              page = browser.new_page()
+              page.goto('https://stortinget-korpus-hark2020.streamlit.app/', wait_until='networkidle', timeout=60000)
+              # Hvis appen allerede har sovnet, klikk på vekke-knappen
+              wake_btn = page.locator('button:has-text(\"Yes, get this app back up\")')
+              if wake_btn.count() > 0:
+                  wake_btn.click()
+                  page.wait_for_timeout(30000)
+              browser.close()
+          "
